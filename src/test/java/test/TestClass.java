@@ -17,6 +17,8 @@ public class TestClass extends BaseClass {
     private  String [] emailsRegistered = {"petarpetrovic","admin","mirkamiric","bojana"};
     private String [] passwords={"petar123","admin","mirka123","bojana"};
     private final String  emailSufix="@gmail.com";
+    private final String[] seeds={"Brazil","Kuba","Etiopija"};
+    private final String[] milks={"Obicno mleko","Bademovo mleko","Sojino mleko"};
 
     @BeforeMethod
     public void beforeAllTests() {
@@ -80,9 +82,9 @@ public class TestClass extends BaseClass {
         login.clickOnRegister();
         Thread.sleep(1000);
         registeringPage.fillFullName("First Last")
-                .fillEmail("email@gmail.com")
+                       .fillEmail("email@gmail.com")
                 .fillPassword("P@ssw0rd")
-                .fillPassword("P@ssw0rd");
+                .fillConfirmPassword("P@ssw0rd");
         Thread.sleep(1000);
         registeringPage.clickOnBack();
         Thread.sleep(1000);
@@ -116,8 +118,38 @@ public class TestClass extends BaseClass {
         homePage.clickOnSignout();
         Thread.sleep(1000);
         Assert.assertEquals(homePage.getLoginText(),"Prijavi se");
-
     }
+
+    @Test
+
+    public void examinePlusButtons() throws Exception {
+        for (int i=0;i<5;i++) {
+            if ((i==3)||(i==4)) homePage.scrollDown();
+            homePage.clickOnSpread(i);
+            Thread.sleep(1000);
+            Assert.assertTrue(homePage.isBasketVisible(i));
+            Assert.assertEquals(homePage.getBasketText(i),"Dodaj u korpu");
+        }
+    }
+
+    @Test
+
+    public void examineSeedsMilkSelection() throws Exception {
+        for (int i=0;i<5;i++) {
+            if ((i==3)||(i==4)) homePage.scrollDown();
+            homePage.clickOnSpread(i);
+            Thread.sleep(500);
+            for (int j=0;j<3;j++){
+                homePage.selectSeedOption(seeds[j],i);
+                Thread.sleep(500);
+                for (int k=0;k<3;k++) {
+                    homePage.selectMilkOption(milks[k],i);
+                   Thread.sleep(500);
+                }
+            }
+        }
+    }
+
     private void alertHandling () {
         Alert alert = driver.switchTo().alert();
         Assert.assertEquals(alert.getText(),"Pogrešan email ili lozinka");

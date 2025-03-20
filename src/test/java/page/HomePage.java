@@ -38,7 +38,7 @@ public class HomePage extends BaseClass {
     @FindBy(id = "dropdown-left")
     List<WebElement> seedDropdown;
 
-    @FindBy(id = "#dropdown-right")
+    @FindBy(id = "dropdown-right")
     List<WebElement> milkDropdown;
 
     @FindBy (xpath="//div[@class='dropdownMenu']/ul/li[2]")
@@ -47,16 +47,22 @@ public class HomePage extends BaseClass {
     @FindBy(xpath = "//div[@class='dropdownMenu']/ul/li[1]")
     WebElement profile;
 
+    @FindBy (css=".coffe-item-basket")
+    List<WebElement> baskets;
+
 
     List<Select> seedSelect;
     List<Select> milkSelect;
 
-    List<WebElement> spreadButtons;
-    List<WebElement> plusQuantityButtons;
+    List<WebElement> spreadButtons = new ArrayList<>();
+    List<WebElement> plusQuantityButtons = new ArrayList<>();
 
     public HomePage () {
         PageFactory.initElements(driver,this);
-
+        spreadButtons=getSpreadButtons();
+        plusQuantityButtons=getPlusButtons();
+        seedSelect=getSeedSelect();
+        milkSelect=getMilkSelect();
     }
 
     public void clickOnLogin () {
@@ -65,13 +71,6 @@ public class HomePage extends BaseClass {
 
     public void clickOnSpread (int i) {
         clickOnElement(spreadButtons.get(i));
-    }
-
-    public void clickOnPlusQuantity (int i) {
-        clickOnElement(plusButtons.get(i));
-    }
-    public void clickOnMinusQuantity (int i) {
-        clickOnElement(minusButtons.get(i));
     }
 
     public void selectSeedOption (String option, int i) {
@@ -90,24 +89,10 @@ public class HomePage extends BaseClass {
         return isElementDisplayed(avatar);
     }
 
-    private List<WebElement> fillButtons (List<WebElement> buttons) {
+    private List<WebElement> fillBaskets (List<WebElement> baskets) {
         List<WebElement> list = new ArrayList<>();
-        for (WebElement w:buttons) {
+        for (WebElement w:baskets) {
             list.add(w);
-        }
-        return list;
-    }
-    private List<Select> selectSpreadButtons () {
-        List<Select> list = new ArrayList<>();
-        for (int i=0;i<getPlusButtons().size();i+=2) {
-            list.add(new Select(getPlusButtons().get(i)));
-        }
-        return list;
-    }
-    private List<Select> selectQuantityPlusButtons () {
-        List<Select> list = new ArrayList<>();
-        for (int i=1;i<getPlusButtons().size();i+=2) {
-            list.add(new Select(getPlusButtons().get(i)));
         }
         return list;
     }
@@ -117,36 +102,50 @@ public class HomePage extends BaseClass {
     }
 
     public List<WebElement> getPlusButtons() {
-        return plusButtons;
+        List<WebElement> list = new ArrayList<>();
+
+        for (int i=1;i< plusButtons.size();i+=2) {
+            list.add(plusButtons.get(i));
+        }
+        return list;
     }
 
     public List<WebElement> getMinusButtons() {
         return minusButtons;
     }
 
-    public List<WebElement> getSeedDropdown() {
-        return seedDropdown;
+    public List<Select> getSeedSelect() {
+        List<Select> list = new ArrayList<>();
+        for (WebElement w:seedDropdown) {
+            list.add(new Select(w));
+        }
+        return list;
+    }
+    public List<Select> getMilkSelect() {
+        List<Select> list = new ArrayList<>();
+        for (WebElement w:milkDropdown) {
+            list.add(new Select(w));
+        }
+//        for (WebElement w:milkDropdown) {
+//            list.add(new Select(w));
+//        }
+        return list;
     }
 
-    public List<WebElement> getMilkDropdown() {
-        return milkDropdown;
-    }
 
-    public List<WebElement> getSpreadButtons() {
-        return spreadButtons;
+    private List<WebElement> getSpreadButtons() {
+        List<WebElement> list = new ArrayList<>();
+
+        for (int i=0;i< plusButtons.size();i+=2) {
+            list.add(plusButtons.get(i));
+        }
+        return list;
     }
 
     public List<WebElement> getPlusQuantityButtons() {
         return plusQuantityButtons;
     }
 
-    public List<Select> getSeedSelect() {
-        return seedSelect;
-    }
-
-    public List<Select> getMilkSelect() {
-        return milkSelect;
-    }
     public void clickOnAvatar() {
         clickOnElement(avatar);
     }
@@ -158,5 +157,21 @@ public class HomePage extends BaseClass {
     }
     public String getLoginText () {
         return getTextFromElement(login);
+    }
+    public void scrollDown () {
+        js.executeScript("window.scrollBy(0,500)");
+    }
+    public boolean isBasketVisible (int i) {
+        return isElementDisplayed(baskets.get(i));
+    }
+    public String getBasketText (int i) {
+        return getTextFromElement(baskets.get(i));
+    }
+
+    public String getSeedOptionText (int i,int j) {
+        return seedSelect.get(i).getOptions().get(j).getText();
+    }
+    public String getMilkOptionText (int i,int j) {
+        return milkSelect.get(i).getOptions().get(j).getText();
     }
 }
