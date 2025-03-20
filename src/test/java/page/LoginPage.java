@@ -5,7 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class Login extends BaseClass {
+public class LoginPage extends BaseClass {
 
     @FindBy (css=".back-button")
     WebElement backButton;
@@ -25,16 +25,16 @@ public class Login extends BaseClass {
     @FindBy (css=".register-link a")
     WebElement register;
 
-    public Login () {
+    public LoginPage() {
         PageFactory.initElements(driver, this);
     }
 
-    public Login fillEmail (String text) {
+    public LoginPage fillEmail (String text) {
         fillTextElement(email, text);
         return this;
     }
 
-    public Login fillPassword (String text) {
+    public LoginPage fillPassword (String text) {
         fillTextElement(password, text);
         return this;
     }

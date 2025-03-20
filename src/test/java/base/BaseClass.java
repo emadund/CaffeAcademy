@@ -7,23 +7,22 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.*;
 
 public class BaseClass {
     protected static WebDriver driver;
     protected static JavascriptExecutor js;
     protected static WebDriverWait wdWait;
+    protected static final String URL_BASE="https://caffe-academy-liard.vercel.app/";
 
-    @BeforeTest
+    @BeforeMethod
 
     public void initial () {
         driver = new ChromeDriver();
         js = (JavascriptExecutor) driver;
         wdWait = new WebDriverWait(driver,java.time.Duration.ofSeconds(10));
         driver.manage().window().maximize();
-        driver.get("https://caffe-academy-liard.vercel.app/");
+        driver.get(URL_BASE);
     }
 
     protected void clickOnElement (WebElement w) {
@@ -55,11 +54,11 @@ public class BaseClass {
     }
 
 
-    /*
-    @AfterTest
+
+    @AfterMethod
     public void tearDown() {   // To shutdown browsers after tests finished
         driver.close();
         driver.quit();
     }
-     */
+
 }

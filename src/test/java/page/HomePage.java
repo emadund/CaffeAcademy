@@ -41,8 +41,12 @@ public class HomePage extends BaseClass {
     @FindBy(id = "#dropdown-right")
     List<WebElement> milkDropdown;
 
-    @FindBy (css=".fas.fa-sign-out-alt")
+    @FindBy (xpath="//div[@class='dropdownMenu']/ul/li[2]")
     WebElement signout;
+
+    @FindBy(xpath = "//div[@class='dropdownMenu']/ul/li[1]")
+    WebElement profile;
+
 
     List<Select> seedSelect;
     List<Select> milkSelect;
@@ -148,5 +152,11 @@ public class HomePage extends BaseClass {
     }
     public void clickOnSignout () {
         clickOnElement(signout);
+    }
+    public void clickOnProfile() {
+        clickOnElement(profile);
+    }
+    public String getLoginText () {
+        return getTextFromElement(login);
     }
 }
