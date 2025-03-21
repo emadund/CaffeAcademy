@@ -2,6 +2,7 @@ package test;
 
 import base.BaseClass;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -123,8 +124,8 @@ public class TestClass extends BaseClass {
     @Test
 
     public void examinePlusButtons() throws Exception {
-        for (int i=0;i<5;i++) {
-            if ((i==3)||(i==4)) homePage.scrollDown();
+        for (int i=0;i< homePage.getSizeSpreadButtons();i++) {
+            if (i>3) homePage.scrollDown();
             homePage.clickOnSpread(i);
             Thread.sleep(1000);
             Assert.assertTrue(homePage.isBasketVisible(i));
@@ -135,8 +136,8 @@ public class TestClass extends BaseClass {
     @Test
 
     public void examineSeedsMilkSelection() throws Exception {
-        for (int i=0;i<5;i++) {
-            if ((i==3)||(i==4)) homePage.scrollDown();
+        for (int i=0;i<homePage.getSizeSpreadButtons();i++) {
+            if (i>=3) homePage.scrollDown();
             homePage.clickOnSpread(i);
             Thread.sleep(500);
             for (int j=0;j<3;j++){
@@ -148,6 +149,23 @@ public class TestClass extends BaseClass {
                 }
             }
         }
+    }
+
+    @Test
+
+    public void examineNarrowButtons() throws Exception {
+
+        examinePlusButtons();
+        Thread.sleep(1000);
+        homePage.scrollUp();
+        Thread.sleep(1000);
+        homePage.scrollUp();
+        for (int i=0;i< homePage.getNarrowButtonsSize();i++) {
+            homePage.clickOnNarrowButton(i);
+            Thread.sleep(1000);
+        }
+
+
     }
 
     private void alertHandling () {

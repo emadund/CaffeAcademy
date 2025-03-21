@@ -44,11 +44,14 @@ public class HomePage extends BaseClass {
     @FindBy (xpath="//div[@class='dropdownMenu']/ul/li[2]")
     WebElement signout;
 
-    @FindBy(xpath = "//div[@class='dropdownMenu']/ul/li[1]")
+    @FindBy (xpath="//div[@class='dropdownMenu']/ul/li[1]")
     WebElement profile;
 
     @FindBy (css=".coffe-item-basket")
     List<WebElement> baskets;
+
+    @FindBy(css = ".fas.fa-minus")
+    List<WebElement> minuses;
 
 
     List<Select> seedSelect;
@@ -56,6 +59,8 @@ public class HomePage extends BaseClass {
 
     List<WebElement> spreadButtons = new ArrayList<>();
     List<WebElement> plusQuantityButtons = new ArrayList<>();
+    List<WebElement> narrowButtons = new ArrayList<>();
+    List<WebElement> minusQuantityButtons = new ArrayList<>();
 
     public HomePage () {
         PageFactory.initElements(driver,this);
@@ -63,6 +68,8 @@ public class HomePage extends BaseClass {
         plusQuantityButtons=getPlusButtons();
         seedSelect=getSeedSelect();
         milkSelect=getMilkSelect();
+        narrowButtons=getNarrowButtons();
+        minusQuantityButtons=getMinusQuantityButtons();
     }
 
     public void clickOnLogin () {
@@ -159,7 +166,7 @@ public class HomePage extends BaseClass {
         return getTextFromElement(login);
     }
     public void scrollDown () {
-        js.executeScript("window.scrollBy(0,500)");
+        js.executeScript("window.scrollBy(0,1000)");
     }
     public boolean isBasketVisible (int i) {
         return isElementDisplayed(baskets.get(i));
@@ -174,4 +181,41 @@ public class HomePage extends BaseClass {
     public String getMilkOptionText (int i,int j) {
         return milkSelect.get(i).getOptions().get(j).getText();
     }
+    public int getSizeSpreadButtons () {
+        return spreadButtons.size();
+    }
+    public int getSizeMilkButtons () {
+        return milkSelect.size();
+    }
+    public int getSizeSeedButtons() {
+        return seedSelect.size();
+    }
+
+    private List<WebElement> getNarrowButtons() {
+        List<WebElement> list = new ArrayList<>();
+
+        for (int i=0;i< minuses.size();i+=2) {
+            list.add(minuses.get(i));
+        }
+        return list;
+    }
+    public List<WebElement> getMinusQuantityButtons() {
+        List<WebElement> list = new ArrayList<>();
+
+        for (int i=1;i< minuses.size();i+=2) {
+            list.add(minuses.get(i));
+        }
+        return list;
+    }
+    public void clickOnNarrowButton (int i) {
+        clickOnElement(narrowButtons.get(i));
+    }
+    public int getNarrowButtonsSize() {
+        return narrowButtons.size();
+    }
+    public void scrollUp () {
+        js.executeScript("window.scrollBy(0,-20000)");
+    }
+
+
 }
