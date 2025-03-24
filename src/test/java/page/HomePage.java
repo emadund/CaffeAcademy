@@ -53,6 +53,21 @@ public class HomePage extends BaseClass {
     @FindBy(css = ".fas.fa-minus")
     List<WebElement> minuses;
 
+    @FindBy(xpath = "//p/span[2]")
+    WebElement overall;
+
+    @FindBy (xpath = "//span/strong")
+    List<WebElement> itemPrices;
+
+    @FindBy (css="[alt='Coffe size S']")
+    List<WebElement> smalls;
+
+    @FindBy (css="[alt='Coffe size M']")
+    List<WebElement> mediums;
+
+    @FindBy (css="[alt='Coffe size L']")
+    List<WebElement> bigs;
+
 
     List<Select> seedSelect;
     List<Select> milkSelect;
@@ -87,6 +102,7 @@ public class HomePage extends BaseClass {
     public void selectMilkOption (String option, int i) {
         milkSelect.get(i).selectByVisibleText(option);
     }
+
 
     public void addToCart (int i) {
         clickOnElement(addToCart.get(i));
@@ -207,6 +223,8 @@ public class HomePage extends BaseClass {
         }
         return list;
     }
+
+
     public void clickOnNarrowButton (int i) {
         clickOnElement(narrowButtons.get(i));
     }
@@ -215,6 +233,47 @@ public class HomePage extends BaseClass {
     }
     public void scrollUp () {
         js.executeScript("window.scrollBy(0,-20000)");
+    }
+    public int getCartButtonsSize() {
+        return addToCart.size();
+    }
+
+    public double getOverallPrice() {
+        String [] words = getTextFromElement(overall).split(" ");
+        String [] price = words[0].split(",");
+        if (price[0].length()>3) {
+            String [] newPriceWords = price[0].split(".");
+            return Double.parseDouble(newPriceWords[0])*1000+Double.parseDouble(newPriceWords[1]);
+        }
+        else
+            return Double.parseDouble(price[0]);
+    }
+    public double getPriceItem (int i) {
+        String [] words = getTextFromElement(itemPrices.get(i)).split(" ");
+        String [] price = words[0].split(",");
+        return Double.parseDouble(price[0]);
+    }
+
+    public String getOverallPriceText() {
+        return getTextFromElement(overall);
+    }
+
+    public void clickOnSmallSize (int i) {
+        clickOnElement(smalls.get(i));
+    }
+    public void clickOnMediumSize (int i) {
+        clickOnElement(mediums.get(i));
+    }
+    public void clickOnBigSize (int i) {
+        clickOnElement(bigs.get(i));
+    }
+
+    public void clickOnPlusQuantity (int i) {
+        clickOnElement(plusQuantityButtons.get(i));
+    }
+
+    public void clickOnMinusesQuantity (int i) {
+        clickOnElement(minusButtons.get(i));
     }
 
 

@@ -144,8 +144,16 @@ public class TestClass extends BaseClass {
                 homePage.selectSeedOption(seeds[j],i);
                 Thread.sleep(500);
                 for (int k=0;k<3;k++) {
-                    homePage.selectMilkOption(milks[k],i);
-                   Thread.sleep(500);
+                    try {
+                        homePage.selectMilkOption(milks[k], i);
+                    }
+                    catch (Exception e) {
+                        continue;
+                    }
+                    finally {
+                        Thread.sleep(500);
+                    }
+
                 }
             }
         }
@@ -165,7 +173,69 @@ public class TestClass extends BaseClass {
             Thread.sleep(1000);
         }
 
+    }
 
+    @Test
+
+    public void examineCart() throws Exception {
+        double price=0;
+        for (int i=0;i< homePage.getSizeSpreadButtons();i++) {
+            if (i>=2) homePage.scrollDown();
+            homePage.clickOnSpread(i);
+            Thread.sleep(2000);
+            homePage.addToCart(i);
+            price+=homePage.getPriceItem(i);
+            System.out.println("Moment price: "+price);
+            System.out.println(homePage.getOverallPriceText());
+            System.out.println("Overall price: "+homePage.getOverallPrice());
+            Assert.assertEquals(price,homePage.getOverallPrice());
+        }
+    }
+
+    @Test
+
+    public void examineSizes() throws Exception {
+        for (int i=0;i< homePage.getSizeSpreadButtons();i++) {
+            if (i>=2) homePage.scrollDown();
+            homePage.clickOnSpread(i);
+            Thread.sleep(500);
+            homePage.clickOnSmallSize(i);
+            Thread.sleep(500);
+            homePage.clickOnMediumSize(i);
+            Thread.sleep(500);
+            homePage.clickOnBigSize(i);
+            Thread.sleep(500);
+        }
+    }
+
+    @Test
+
+    public void examineQuantityButtons() throws Exception {
+        for (int i=0;i< homePage.getSizeSpreadButtons();i++) {
+            homePage.clickOnSpread(i);
+            Thread.sleep(500);
+            homePage.clickOnPlusQuantity(i);
+            Thread.sleep(500);
+            homePage.clickOnPlusQuantity(i);
+            Thread.sleep(500);
+            homePage.clickOnPlusQuantity(i);
+            Thread.sleep(500);
+            homePage.clickOnPlusQuantity(i);
+            Thread.sleep(500);
+            homePage.clickOnPlusQuantity(i);
+            Thread.sleep(500);
+            homePage.clickOnMinusesQuantity(i);
+            Thread.sleep(500);
+            homePage.clickOnMinusesQuantity(i);
+            Thread.sleep(500);
+            homePage.clickOnMinusesQuantity(i);
+            Thread.sleep(500);
+            homePage.clickOnMinusesQuantity(i);
+            Thread.sleep(500);
+            homePage.clickOnMinusesQuantity(i);
+            Thread.sleep(500);
+
+        }
     }
 
     private void alertHandling () {
@@ -173,4 +243,5 @@ public class TestClass extends BaseClass {
         Assert.assertEquals(alert.getText(),"Pogrešan email ili lozinka");
         alert.accept();
     }
+
 }
