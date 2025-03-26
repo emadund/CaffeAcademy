@@ -16,8 +16,8 @@ public class TestClass extends BaseClass {
     private ConfirmRegistrationPage confirmRegistrationPage;
     private ResettingPasswordPage resettingPasswordPage;
     private OrderStatusPage orderStatusPage;
-    private  String [] emailsRegistered = {"petarpetrovic","admin","mirkamiric","bojana"};
-    private String [] passwords={"petar123","admin","mirka123","bojana"};
+    private final String [] emailsRegistered = {"petarpetrovic","admin","mirkamiric","bojana"};
+    private final String [] passwords={"petar123","admin","mirka123","bojana"};
     private final String  emailSufix="@gmail.com";
     private final String[] seeds={"Brazil","Kuba","Etiopija"};
     private final String[] milks={"Obicno mleko","Bademovo mleko","Sojino mleko"};
@@ -81,7 +81,7 @@ public class TestClass extends BaseClass {
 
     @Test
 
-    public void registeringNotDone() throws Exception{
+    public void registeringNotDone() throws Exception {
         homePage.clickOnLogin();
         Thread.sleep(1000);
         loginPage.clickOnRegister();
@@ -191,7 +191,6 @@ public class TestClass extends BaseClass {
             homePage.clickOnFooter();
             homePage.scrollDown();
             homePage.clickOnX(i);
-            Reporter.log("Price of removed item: "+homePage.getPriceItem(i),true);
             Reporter.log("Overall price at the moment: "+homePage.getOverallPrice(),true);
             Thread.sleep(500);
             homePage.clickOnNo();
