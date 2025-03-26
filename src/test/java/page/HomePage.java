@@ -14,11 +14,9 @@ public class HomePage extends BaseClass {
     @FindBy(css = ".loginButton")
     WebElement login;
 
-    @FindBy(css = ".footerMain__right button")
+    @FindBy(xpath = "//div[@class='footer-order-button']/button")
     WebElement order;
 
-    @FindBy(css = ".footerMain .footerMain__left p")
-    WebElement priceSection;
 
     @FindBy(css = ".avatar")
     WebElement avatar;
@@ -64,6 +62,15 @@ public class HomePage extends BaseClass {
 
     @FindBy(css = ".coffe-item-footer-left span")
     List<WebElement> quantity;
+
+    @FindBy (css=".cart-item-list-remove")
+    List<WebElement> xes;
+
+    @FindBy (css=".modal-button-right.btn.btn-primary")
+    WebElement yes;
+
+    @FindBy (css=".modal-button-left.btn.btn-secondary")
+    WebElement no;
 
     @FindBy(xpath = "//div[@class='coffe-item-right-footer-coffe-size']/img[1]")
     List<WebElement> smallCoffees;
@@ -184,7 +191,7 @@ public class HomePage extends BaseClass {
     }
 
     public void scrollDown() {
-        js.executeScript("window.scrollBy(0,1000)");
+        js.executeScript("window.scrollBy(0,1500)");
     }
 
     public boolean isBasketVisible(int i) {
@@ -197,6 +204,9 @@ public class HomePage extends BaseClass {
 
     public int getSizeSpreadButtons() {
         return spreadButtons.size();
+    }
+    public void clickOnFooter() {
+        clickOnElement(overall);
     }
 
 
@@ -226,14 +236,11 @@ public class HomePage extends BaseClass {
     public int getNarrowButtonsSize() {
         return narrowButtons.size();
     }
-
     public void scrollUp() {
         js.executeScript("window.scrollBy(0,-20000)");
     }
 
-    public int getCartButtonsSize() {
-        return addToCart.size();
-    }
+
 
     public double getOverallPrice() {
         String[] words = getTextFromElement(overall).split(" ");
@@ -292,23 +299,20 @@ public class HomePage extends BaseClass {
         return (bigCoffees.get(i).getDomAttribute("class").equals("selected"));
     }
 
-    public double getOverallPriceValue() {
-        String[] words = getOverallPriceText().split(" ");
+    public void clickOnOrderButton() {
+        clickOnElement(order);
+    }
+    public void clickOnX(int i) {
+        clickOnElement(xes.get(i));
+    }
 
-        if (words[0].length() > 6) {
-            char[] array = words[0].toCharArray();
-            int dot = 0;
-            int coma = 0;
-            for (int i = 0; i < array.length; i++) {
-
-                if (array[i] == '.') {
-                    dot = i;
-                }
-                if (array[i] == ',') {
-                    coma = i;
-                }
-            }
-            return Double.parseDouble(words[0].substring(0, dot)) * 1000 + Double.parseDouble(words[0].substring(dot+1, coma));
-        } else return Double.parseDouble(words[0]);
+    public int getXSize() {
+        return xes.size();
+    }
+    public void clickOnYes() {
+        clickOnElement(yes);
+    }
+    public void clickOnNo() {
+        clickOnElement(no);
     }
 }

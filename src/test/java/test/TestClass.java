@@ -15,6 +15,7 @@ public class TestClass extends BaseClass {
     private RegisteringPage registeringPage;
     private ConfirmRegistrationPage confirmRegistrationPage;
     private ResettingPasswordPage resettingPasswordPage;
+    private OrderStatusPage orderStatusPage;
     private  String [] emailsRegistered = {"petarpetrovic","admin","mirkamiric","bojana"};
     private String [] passwords={"petar123","admin","mirka123","bojana"};
     private final String  emailSufix="@gmail.com";
@@ -28,6 +29,7 @@ public class TestClass extends BaseClass {
         registeringPage = new RegisteringPage();
         confirmRegistrationPage = new ConfirmRegistrationPage();
         resettingPasswordPage = new ResettingPasswordPage();
+        orderStatusPage = new OrderStatusPage();
     }
 
     @Test
@@ -169,7 +171,7 @@ public class TestClass extends BaseClass {
         for (int i=0;i< homePage.getSizeSpreadButtons();i++) {
             if (i>=2) homePage.scrollDown();
             homePage.clickOnSpread(i);
-            Thread.sleep(2000);
+            Thread.sleep(1000);
             homePage.addToCart(i);
             price+=homePage.getPriceItem(i);
             Reporter.log("Moment price: "+price,true);
@@ -177,6 +179,35 @@ public class TestClass extends BaseClass {
             Reporter.log("Overall price: "+homePage.getOverallPrice(),true);
             Assert.assertEquals(price,homePage.getOverallPrice());
         }
+    }
+
+    @Test
+
+    public void cancelOrders() throws Exception {
+        examineItemCartsSimple();
+        double price=homePage.getOverallPrice();
+        Thread.sleep(1000);
+        for (int i=6;i>=0;i--) {
+            homePage.clickOnFooter();
+            homePage.scrollDown();
+            homePage.clickOnX(i);
+            Reporter.log("Price of removed item: "+homePage.getPriceItem(i),true);
+            Reporter.log("Overall price at the moment: "+homePage.getOverallPrice(),true);
+            Thread.sleep(500);
+            homePage.clickOnNo();
+            Thread.sleep(500);
+            homePage.clickOnFooter();
+            homePage.clickOnX(i);
+            Thread.sleep(500);
+            Reporter.log("Item is removed of price: "+homePage.getPriceItem(i),true);
+            Thread.sleep(500);
+            homePage.clickOnYes();
+            Reporter.log("Overall price at the moment: "+homePage.getOverallPrice(),true);
+            price-=homePage.getPriceItem(i);
+            Assert.assertEquals(price,homePage.getOverallPrice());
+            Thread.sleep(500);
+        }
+
     }
 
 //    @Test
@@ -321,6 +352,19 @@ public class TestClass extends BaseClass {
         resettingPasswordPage.clickOnResetButton();
         Assert.assertEquals(driver.getCurrentUrl(),URL_BASE+"login");
 
+    }
+
+    @Test
+
+    public void examineOrderStatus () throws Exception {
+        homePage.clickOnOrderButton();
+        Assert.assertEquals(orderStatusPage.getStatusMessage(),"Porudzbina primljena");
+        Thread.sleep(16000);
+        Assert.assertEquals(orderStatusPage.getStatusMessage(),"Kafa se priprema!");
+        Thread.sleep(15000);
+        Assert.assertEquals(orderStatusPage.getStatusMessage(),"Kafa je spremna!");
+        orderStatusPage.clickOnBack();
+        Assert.assertEquals(driver.getCurrentUrl(),URL_BASE);
     }
 
     private void alertHandling () {
