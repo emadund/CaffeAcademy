@@ -51,6 +51,9 @@ public class LoginPage extends BaseClass {
     public void clickOnRegister() {
         clickOnElement(register);
     }
+    public void clickOnForgetPassword() {
+        clickOnElement(forgottenPassword);
+    }
 
 
 }
