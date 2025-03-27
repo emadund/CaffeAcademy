@@ -7,16 +7,16 @@ import org.openqa.selenium.support.PageFactory;
 
 public class RegisteringPage extends BaseClass {
 
-    @FindBy (css="[placeholder='Unesite Ime i Prezime']")
+    @FindBy (css="[placeholder=\"Unesite ime i prezime\"]")
     WebElement fullName;
 
-    @FindBy (css="[placeholder='Unesite Email adresu']")
+    @FindBy (css="[placeholder=\"Unesite Email adresu\"]")
     WebElement email;
 
-    @FindBy (css="[placeholder='Unesite lozinku']")
+    @FindBy (css="[placeholder=\"Unesite lozinku\"]")
     WebElement password;
 
-    @FindBy (css="[placeholder='Potvrdite lozinku']")
+    @FindBy (css="[placeholder=\"Potvrdite lozinku\"']")
     WebElement confirmPassword;
 
     @FindBy (className = "registerButton")

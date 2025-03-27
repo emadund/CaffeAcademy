@@ -79,6 +79,9 @@ public class HomePage extends BaseClass {
     @FindBy(xpath = "//div[@class='coffe-item-right-footer-coffe-size']/img[3]")
     List<WebElement> bigCoffees;
 
+    @FindBy(xpath = "//div/h3")
+    WebElement loyaltyText;
+
 
     List<Select> seedSelect;
     List<Select> milkSelect;
@@ -314,5 +317,12 @@ public class HomePage extends BaseClass {
     }
     public void clickOnNo() {
         clickOnElement(no);
+    }
+
+    public boolean isLoyaltyDisplayed() {
+        return isElementDisplayed(loyaltyText);
+    }
+    public String loyaltyTextDisplayed() {
+        return getTextFromElement(loyaltyText);
     }
 }

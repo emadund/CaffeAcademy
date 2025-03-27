@@ -32,40 +32,40 @@ public class TestClass extends BaseClass {
         orderStatusPage = new OrderStatusPage();
     }
 
-    @Test
+    @Test (priority = 2, description = "login with valid inputs", dependsOnMethods ="examineLoyaltyPage")
 
-    public void successfullLogin1 () throws Exception {
+    public void successfullLogin () throws Exception {
         for (int i=0;i<4;i++) {
             if (i==1) continue;
             homePage.clickOnLogin();
-            Thread.sleep(1000);
+            Thread.sleep(500);
             loginPage.fillEmail(emailsRegistered[i]+emailSufix);
-            Thread.sleep(1000);
+            Thread.sleep(500);
             loginPage.fillPassword(passwords[i]);
-            Thread.sleep(1000);
+            Thread.sleep(500);
             loginPage.clickOnLogin();
             Assert.assertTrue(homePage.isAvatarVisible());
-            Thread.sleep(1000);
+            Thread.sleep(500);
             homePage.clickOnAvatar();
-            Thread.sleep(1000);
+            Thread.sleep(500);
             homePage.clickOnSignout();
         }
     }
 
-    @Test
+    @Test (priority = 4, description = "invalid credentials")
 
     public void unsuccessfullLogin () throws Exception {
         homePage.clickOnLogin();
-        Thread.sleep(1000);
+        Thread.sleep(500);
         loginPage.fillEmail("wrong_on_purpose");
-        Thread.sleep(1000);
+        Thread.sleep(500);
         loginPage.clickOnLogin();
-        Thread.sleep(1000);
-        alertHandling(); // empty password
+        Thread.sleep(500);
+        Assert.assertEquals(loginPage.getErrorMessage(),"Uneli ste pogrešnu lozinku. Pokušajte ponovo."); // empty password
         loginPage.fillPassword("wrong_on_purpose");
-        Thread.sleep(1000);
+        Thread.sleep(500);
         loginPage.clickOnLogin();
-        alertHandling(); // empty email
+        Assert.assertEquals(loginPage.getErrorMessage(),"Uneli ste pogrešnu lozinku. Pokušajte ponovo."); // empty email
         for (int i=0;i<4;i++) {
             loginPage.fillEmail(emailsRegistered[i]+emailSufix);
             Thread.sleep(1000);
@@ -74,70 +74,53 @@ public class TestClass extends BaseClass {
                 loginPage.fillPassword(passwords[j]);
                 Thread.sleep(1000);
                 loginPage.clickOnLogin();
-                alertHandling();
+                Assert.assertEquals(loginPage.getErrorMessage(),"Uneli ste pogrešnu lozinku. Pokušajte ponovo."); // credentials not matching
             }
         }
     }
 
-    @Test
-
-    public void registeringNotDone() throws Exception {
-        homePage.clickOnLogin();
-        Thread.sleep(1000);
-        loginPage.clickOnRegister();
-        Thread.sleep(1000);
-        registeringPage.fillFullName("First Last")
-                       .fillEmail("email@gmail.com")
-                .fillPassword("P@ssw0rd")
-                .fillConfirmPassword("P@ssw0rd");
-        Thread.sleep(1000);
-        registeringPage.clickOnBack();
-        Thread.sleep(1000);
-        Assert.assertEquals(driver.getCurrentUrl(),URL_BASE+"login");
-        driver.navigate().back();
-        Thread.sleep(1000);
-        registeringPage.clickOnLogin();
-        Assert.assertEquals(driver.getCurrentUrl(),URL_BASE+"login");
-
-    }
-
-    @Test
+    @Test (priority = 3, description = "profile options", dependsOnMethods = "examineLoyaltyPage")
 
     public void examineProfileHomePage() throws Exception {
-        homePage.clickOnLogin();
-        Thread.sleep(1000);
-        loginPage.fillEmail(emailsRegistered[0]+emailSufix)
-                .fillPassword(passwords[0]);
-        Thread.sleep(1000);
-        loginPage.clickOnLogin();
-        Thread.sleep(1000);
-        homePage.clickOnAvatar();
-        Thread.sleep(1000);
-        homePage.clickOnProfile();
-        Thread.sleep(1000);
-        Assert.assertEquals(driver.getCurrentUrl(),URL_BASE+"profile");
-        registeringPage.clickOnBack();
-        Thread.sleep(1000);
-        homePage.clickOnAvatar();
-        Thread.sleep(1000);
-        homePage.clickOnSignout();
-        Thread.sleep(1000);
-        Assert.assertEquals(homePage.getLoginText(),"Prijavi se");
+
+        for (int i=0;i<4;i++) {
+            homePage.clickOnLogin();
+            if (i==1) continue;
+            Thread.sleep(500);
+            loginPage.fillEmail(emailsRegistered[i] + emailSufix)
+                    .fillPassword(passwords[i]);
+            Thread.sleep(500);
+            loginPage.clickOnLogin();
+            Thread.sleep(500);
+            homePage.clickOnAvatar();
+            Thread.sleep(500);
+            homePage.clickOnProfile();
+            Thread.sleep(500);
+            Assert.assertEquals(driver.getCurrentUrl(), URL_BASE + "profile");
+            examineLoyaltyPage();
+            registeringPage.clickOnBack();
+            Thread.sleep(500);
+            homePage.clickOnAvatar();
+            Thread.sleep(500);
+            homePage.clickOnSignout();
+            Thread.sleep(500);
+            Assert.assertEquals(homePage.getLoginText(), "Prijavi se");
+        }
     }
 
-    @Test
+    @Test (priority = 6, description = "spread item options")
 
     public void examinePlusButtons() throws Exception {
         for (int i=0;i< homePage.getSizeSpreadButtons();i++) {
             if (i>3) homePage.scrollDown();
             homePage.clickOnSpread(i);
-            Thread.sleep(1000);
+            Thread.sleep(500);
             Assert.assertTrue(homePage.isBasketVisible(i));
             Assert.assertEquals(homePage.getBasketText(i),"Dodaj u korpu");
         }
     }
 
-    @Test
+    @Test (priority = 8 , description = "milk and seed select options")
 
     public void examineSeedsMilkSelection() throws Exception {
         for (int i=0;i<homePage.getSizeSpreadButtons();i++) {
@@ -148,30 +131,30 @@ public class TestClass extends BaseClass {
         }
     }
 
-    @Test
+    @Test (priority = 7, description = "narrow item options",dependsOnMethods = "examinePlusButtons")
 
     public void examineNarrowButtons() throws Exception {
 
         examinePlusButtons();
-        Thread.sleep(1000);
+        Thread.sleep(500);
         homePage.scrollUp();
-        Thread.sleep(1000);
+        Thread.sleep(500);
         homePage.scrollUp();
         for (int i=0;i< homePage.getNarrowButtonsSize();i++) {
             homePage.clickOnNarrowButton(i);
-            Thread.sleep(1000);
+            Thread.sleep(500);
         }
 
     }
 
-    @Test
+    @Test (priority = 11, description = "one item each in cart")
 
     public void examineItemCartsSimple() throws Exception {
         double price=0;
         for (int i=0;i< homePage.getSizeSpreadButtons();i++) {
             if (i>=2) homePage.scrollDown();
             homePage.clickOnSpread(i);
-            Thread.sleep(1000);
+            Thread.sleep(500);
             homePage.addToCart(i);
             price+=homePage.getPriceItem(i);
             Reporter.log("Moment price: "+price,true);
@@ -181,12 +164,12 @@ public class TestClass extends BaseClass {
         }
     }
 
-    @Test
+    @Test (priority = 12, description = "cancel orders for each item", dependsOnMethods = "examineItemCartsSimple")
 
     public void cancelOrders() throws Exception {
         examineItemCartsSimple();
         double price=homePage.getOverallPrice();
-        Thread.sleep(1000);
+        Thread.sleep(500);
         for (int i=6;i>=0;i--) {
             homePage.clickOnFooter();
             homePage.scrollDown();
@@ -209,7 +192,7 @@ public class TestClass extends BaseClass {
 
     }
 
-//    @Test
+//    @Test (priority = 13, description = "one item each in cart", dependOnMethod="examineItemCartsSimple")
 //
 //    public void examineCart() throws Exception {
 //        double price=0;
@@ -242,7 +225,7 @@ public class TestClass extends BaseClass {
 //            Assert.assertEquals(price,homePage.getOverallPrice());
 //                        }
 //        }
-    @Test
+    @Test (priority = 9 , description = "all size options", dependsOnMethods = "examinePlusButtons")
 
     public void examineSizes() throws Exception {
         for (int i=0;i< homePage.getSizeSpreadButtons();i++) {
@@ -264,7 +247,7 @@ public class TestClass extends BaseClass {
         }
     }
 
-    @Test
+    @Test (priority = 10 , description = "+ and - quantity options", dependsOnMethods = "examinePlusButtons")
 
     public void examineQuantityButtons() throws Exception {
         int j=1;
@@ -306,18 +289,20 @@ public class TestClass extends BaseClass {
         }
     }
 
-    @Test
+    @Test (priority = 5, description = "registering")
 
     public void registerPageTest () throws Exception {
         fillRegistrationForm();
+        Thread.sleep(500);
         confirmRegistrationPage.clickOnBackToHome();
+        Thread.sleep(500);
         Assert.assertEquals(driver.getCurrentUrl(),URL_BASE);
         fillRegistrationForm();
         confirmRegistrationPage.clickOnBack();
         Assert.assertEquals(driver.getCurrentUrl(),URL_BASE+"login");
     }
 
-    @Test
+    @Test (priority = 14, description = "reset password page check")
 
     public void resetPasswordExamine() throws Exception {
         homePage.clickOnLogin();
@@ -353,7 +338,7 @@ public class TestClass extends BaseClass {
 
     }
 
-    @Test
+    @Test (priority=15, description = "checking animation of coffee preparing and serving")
 
     public void examineOrderStatus () throws Exception {
         homePage.clickOnOrderButton();
@@ -366,11 +351,17 @@ public class TestClass extends BaseClass {
         Assert.assertEquals(driver.getCurrentUrl(),URL_BASE);
     }
 
-    private void alertHandling () {
-        Alert alert = driver.switchTo().alert();
-        Assert.assertEquals(alert.getText(),"Pogrešan email ili lozinka");
-        alert.accept();
+    @Test (priority = 1, description = "loyality page check")
+
+    public void examineLoyaltyPage () throws Exception {
+        if (!driver.getCurrentUrl().equals(URL_BASE+"profile"))
+            driver.get(URL_BASE+"profile");
+        Thread.sleep(500);
+        Assert.assertTrue(homePage.isLoyaltyDisplayed());
+        Assert.assertEquals(homePage.loyaltyTextDisplayed(),"Loyalty program");
     }
+
+
 
     private void fillRegistrationForm () throws Exception {
         homePage.clickOnLogin();
@@ -395,7 +386,7 @@ public class TestClass extends BaseClass {
                     homePage.selectMilkOption(milks[k], i);
                 }
                 catch (Exception e) {
-                    Reporter.log("Milk option isn't available",true);
+                    Reporter.log("Milk option isn't available for item number: "+(i+1),true);
                 }
                 finally {
                     Thread.sleep(500);

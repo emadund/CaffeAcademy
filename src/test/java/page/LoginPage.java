@@ -25,6 +25,9 @@ public class LoginPage extends BaseClass {
     @FindBy (css=".register-link a")
     WebElement register;
 
+    @FindBy (css=".login-form-alert-message2 p")
+    WebElement errorMessage;
+
     public LoginPage() {
         PageFactory.initElements(driver, this);
     }
@@ -53,6 +56,9 @@ public class LoginPage extends BaseClass {
     }
     public void clickOnForgetPassword() {
         clickOnElement(forgottenPassword);
+    }
+    public String getErrorMessage() {
+        return getTextFromElement(errorMessage);
     }
 
 
